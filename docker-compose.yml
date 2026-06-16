@@ -1,0 +1,23 @@
+# Docker Compose configuration for running terraform-docs
+#
+# Usage:
+#   docker compose run --rm terraform-docs markdown .      # generate markdown docs
+#   docker compose run --rm terraform-docs markdown table .
+#   docker compose run --rm terraform-docs --help
+
+services:
+  terraform-docs:
+    image: ragedunicorn/terraform-docs:${TERRAFORM_DOCS_VERSION:-latest}
+    container_name: terraform-docs
+    # Match the host user so any files terraform-docs writes to the bind mount
+    # (for example with --output-file) stay owned by you. Export UID/GID or set
+    # them in .env to override the 1000:1000 default.
+    user: "${UID:-1000}:${GID:-1000}"
+    volumes:
+      # Writable so `--output-file` can write generated docs back into the module.
+      - ./:/workspace
+    working_dir: /workspace
+    environment:
+      - TERM=xterm-256color
+    tty: true
+    init: true

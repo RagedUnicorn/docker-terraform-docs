@@ -1,0 +1,27 @@
+# Docker Compose example for a real terraform-docs workflow
+#
+# Demonstrates the runtime concerns that matter for terraform-docs:
+#   - a writable working directory so `--output-file` can write generated docs
+#   - host UID/GID matching so any files written stay owned by you
+#
+# Usage:
+#   # Print markdown docs for the example module to stdout
+#   docker compose -f examples/docker-compose.yml run --rm terraform-docs markdown .
+#
+#   # Inject the generated table into a README between the marker comments
+#   docker compose -f examples/docker-compose.yml run --rm \
+#     terraform-docs markdown table --output-file README.md .
+
+services:
+  terraform-docs:
+    image: ragedunicorn/terraform-docs:${TERRAFORM_DOCS_VERSION:-latest}
+    container_name: terraform-docs-example
+    user: "${UID:-1000}:${GID:-1000}"
+    working_dir: /workspace
+    volumes:
+      # Writable: terraform-docs may write generated docs back with --output-file.
+      - ./:/workspace
+    environment:
+      - TERM=xterm-256color
+    tty: true
+    init: true

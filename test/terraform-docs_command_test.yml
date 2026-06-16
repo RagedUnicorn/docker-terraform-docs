@@ -1,0 +1,45 @@
+schemaVersion: 2.0.0
+
+commandTests:
+  - name: 'terraform-docs version output'
+    command: 'terraform-docs'
+    args: ['--version']
+    exitCode: 0
+    expectedOutput:
+      - 'terraform-docs version'
+
+  - name: 'terraform-docs help command'
+    command: 'terraform-docs'
+    args: ['--help']
+    exitCode: 0
+    expectedOutput:
+      - 'Usage:'
+      - 'terraform-docs'
+
+  - name: 'Working directory is set correctly'
+    command: 'pwd'
+    exitCode: 0
+    expectedOutput:
+      - '/workspace'
+
+  - name: 'Runs as non-root terraform-docs user'
+    command: 'id'
+    args: ['-un']
+    exitCode: 0
+    expectedOutput:
+      - 'terraform-docs'
+
+  - name: 'Generates markdown docs for a sample module'
+    # A tiny module with one input and one output is enough to render the
+    # markdown tables; terraform-docs reads only local files, so this runs
+    # fully offline with no network access.
+    setup: [
+      ['sh', '-c', 'mkdir -p /tmp/tfdoc && printf "variable \"name\" {\n  description = \"Name to greet\"\n  type        = string\n  default     = \"world\"\n}\n\noutput \"greeting\" {\n  description = \"A friendly greeting\"\n  value       = \"Hello\"\n}\n" > /tmp/tfdoc/main.tf']
+    ]
+    command: 'sh'
+    args: ['-c', 'cd /tmp/tfdoc && terraform-docs markdown .']
+    exitCode: 0
+    expectedOutput:
+      - '## Inputs'
+      - '## Outputs'
+      - '\| Name \|'

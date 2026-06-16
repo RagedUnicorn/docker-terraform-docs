@@ -1,0 +1,29 @@
+# Docker Compose configuration for development
+#
+# This file is used for building and testing the terraform-docs image locally
+#
+# Usage:
+#   docker compose -f docker-compose.dev.yml build
+#   docker compose -f docker-compose.dev.yml run --rm terraform-docs-dev
+#
+# This drops you into a shell where you can manually run terraform-docs commands
+
+services:
+  terraform-docs-dev:
+    build: .
+    image: ragedunicorn/terraform-docs:dev
+    volumes:
+      - ./examples:/workspace
+      - ./test:/test:ro
+    working_dir: /workspace
+    stdin_open: true
+    tty: true
+    # Override entrypoint to get a shell instead of the terraform-docs binary
+    entrypoint: /bin/sh
+    labels:
+      org.opencontainers.image.title: "terraform-docs on Alpine Linux (Dev)"
+      org.opencontainers.image.description: "terraform-docs development environment for testing and debugging"
+      org.opencontainers.image.vendor: "ragedunicorn"
+    environment:
+      - TERM=xterm-256color
+      - PS1=\[\033[1;35m\]terraform-docs-dev\[\033[0m\]:\w\$
