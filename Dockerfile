@@ -1,7 +1,7 @@
 ############################################
 # Download + verify stage
 ############################################
-FROM alpine:3.22.1 AS build
+FROM alpine:3.24.1 AS build
 
 # renovate: datasource=github-releases depName=terraform-docs/terraform-docs
 ARG TERRAFORM_DOCS_VERSION=0.24.0
@@ -48,7 +48,7 @@ RUN set -eux; \
 ############################################
 # Runtime stage
 ############################################
-FROM alpine:3.22.1
+FROM alpine:3.24.1
 
 ARG BUILD_DATE
 ARG VERSION
@@ -63,7 +63,7 @@ LABEL org.opencontainers.image.title="terraform-docs on Alpine Linux" \
       org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.version="${VERSION}" \
       org.opencontainers.image.created="${BUILD_DATE}" \
-      org.opencontainers.image.base.name="docker.io/library/alpine:3.22.1"
+      org.opencontainers.image.base.name="docker.io/library/alpine:3.24.1"
 
 # No runtime dependencies: terraform-docs reads local .tf files and writes to
 # stdout (or a file with --output-file). It needs no network, git, or
