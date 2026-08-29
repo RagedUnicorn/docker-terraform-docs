@@ -1,6 +1,6 @@
 # terraform-docs Alpine Docker Image
 
-![Docker terraform-docs](https://raw.githubusercontent.com/RagedUnicorn/docker-terraform-docs/master/docs/docker_terraform_docs.png)
+![Docker terraform-docs](https://raw.githubusercontent.com/RagedUnicorn/docker-terraform-docs/master/docs/docker_terraform_docs_banner.png)
 
 A lightweight [terraform-docs](https://github.com/terraform-docs/terraform-docs)
 CLI built on Alpine Linux. The official terraform-docs release is
