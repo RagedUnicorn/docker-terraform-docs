@@ -90,16 +90,16 @@ docker build -t ragedunicorn/terraform-docs:dev .
 docker build \
   --build-arg TERRAFORM_DOCS_VERSION=0.24.0 \
   --build-arg BUILD_DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
-  --build-arg VERSION=0.24.0-alpine3.22.1-1 \
-  -t ragedunicorn/terraform-docs:0.24.0-alpine3.22.1-1 .
+  --build-arg VERSION=0.24.0-alpine3.24.3-1 \
+  -t ragedunicorn/terraform-docs:0.24.0-alpine3.24.3-1 .
 
 # Multi-platform build (requires buildx). Do NOT set TARGETARCH by hand.
 docker buildx build \
   --platform linux/amd64,linux/arm64 \
   --build-arg TERRAFORM_DOCS_VERSION=0.24.0 \
-  --build-arg VERSION=0.24.0-alpine3.22.1-1 \
+  --build-arg VERSION=0.24.0-alpine3.24.3-1 \
   --build-arg BUILD_DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
-  -t ragedunicorn/terraform-docs:0.24.0-alpine3.22.1-1 .
+  -t ragedunicorn/terraform-docs:0.24.0-alpine3.24.3-1 .
 ```
 
 ### 3. Testing Your Changes

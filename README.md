@@ -62,7 +62,7 @@ docker run --rm -v "$(pwd)":/workspace ragedunicorn/terraform-docs:latest [terra
 docker run --rm -v "$(pwd)":/workspace ragedunicorn/terraform-docs:0.24.0 [terraform-docs-args]
 
 # Using an exact version combination
-docker run --rm -v "$(pwd)":/workspace ragedunicorn/terraform-docs:0.24.0-alpine3.22.1-1 [terraform-docs-args]
+docker run --rm -v "$(pwd)":/workspace ragedunicorn/terraform-docs:0.24.0-alpine3.24.1-1 [terraform-docs-args]
 ```
 
 ### Examples
@@ -138,11 +138,11 @@ docker compose run --rm terraform-docs markdown .
 ```
 
 The base `docker-compose.yml` mounts the current directory (writable) at
-`/workspace` and matches your host UID/GID. Export `UID`/`GID` first so they are
-available to compose:
+`/workspace` and matches your host UID/GID. Set `UID`/`GID` first so they are
+available to compose (bash defines `UID` but not `GID`, so derive both from `id`):
 
 ```bash
-export UID GID
+export UID="$(id -u)" GID="$(id -g)"
 docker compose run --rm terraform-docs markdown .
 ```
 
@@ -182,7 +182,7 @@ This project uses versioning that matches the Docker image contents:
 **Format:** `{terraform_docs_version}-alpine{alpine_version}-{build_number}`
 
 Examples:
-- `0.24.0-alpine3.22.1-1` - terraform-docs 0.24.0 on Alpine 3.22.1, build 1
+- `0.24.0-alpine3.24.1-1` - terraform-docs 0.24.0 on Alpine 3.24.1, build 1
 - `latest` - Most recent stable release
 
 The build number resets to `1` whenever terraform-docs is bumped, and is

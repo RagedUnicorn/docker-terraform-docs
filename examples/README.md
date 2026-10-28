@@ -27,21 +27,40 @@ docker compose -f examples/docker-compose.yml run --rm terraform-docs markdown .
 
 ### Expected Output
 
-terraform-docs prints a markdown document with Inputs and Outputs tables:
+terraform-docs prints a markdown document with Requirements, Providers, Modules,
+Resources, Inputs and Outputs sections:
 
 ```markdown
+## Requirements
+
+| Name | Version |
+| ---- | ------- |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
+
+## Providers
+
+No providers.
+
+## Modules
+
+No modules.
+
+## Resources
+
+No resources.
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| enabled | Whether the greeting is enabled | `bool` | `true` | no |
-| name | Name to greet | `string` | `"world"` | no |
+| ---- | ----------- | ---- | ------- | :------: |
+| <a name="input_enabled"></a> [enabled](#input\_enabled) | Whether the greeting is enabled | `bool` | `true` | no |
+| <a name="input_name"></a> [name](#input\_name) | Name to greet | `string` | `"world"` | no |
 
 ## Outputs
 
 | Name | Description |
-|------|-------------|
-| greeting | A friendly greeting built from var.name |
+| ---- | ----------- |
+| <a name="output_greeting"></a> [greeting](#output\_greeting) | A friendly greeting built from var.name |
 ```
 
 ## Writing Docs Back Into a README

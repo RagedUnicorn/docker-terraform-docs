@@ -7,8 +7,8 @@ project.
 
 ```bash
 # Tag format: v{terraform_docs_version}-alpine{alpine_version}-{build_number}
-git tag -a v0.24.0-alpine3.22.1-1 -m "v0.24.0-alpine3.22.1-1"
-git push origin v0.24.0-alpine3.22.1-1
+git tag -a v0.24.0-alpine3.24.3-1 -m "v0.24.0-alpine3.24.3-1"
+git push origin v0.24.0-alpine3.24.3-1
 ```
 
 This automatically triggers the release process via GitHub Actions.
@@ -20,10 +20,10 @@ See [README.md](README.md#versioning) for the complete versioning documentation.
 **Format:** `v{terraform_docs_version}-alpine{alpine_version}-{build_number}`
 
 Examples:
-- `v0.24.0-alpine3.22.1-1` - Initial release
-- `v0.24.0-alpine3.22.1-2` - Rebuild with the same versions
-- `v0.24.0-alpine3.22.2-1` - Alpine patch update (build resets to 1)
-- `v0.25.0-alpine3.22.1-1` - terraform-docs update (build resets to 1)
+- `v0.24.0-alpine3.24.1-1` - terraform-docs 0.24.0 on Alpine 3.24.1, build 1
+- `v0.24.0-alpine3.24.1-2` - Rebuild with the same versions
+- `v0.24.0-alpine3.24.2-1` - Alpine patch update (build resets to 1)
+- `v0.25.0-alpine3.24.1-1` - terraform-docs update (build resets to 1)
 
 ## Release Workflow
 
@@ -33,7 +33,7 @@ When you push a tag, GitHub Actions automatically:
    - Runs the full Container Structure Test suite first and fails fast if it breaks
    - Multi-platform: `linux/amd64` and `linux/arm64`
    - Pushes to both GitHub Container Registry and Docker Hub
-   - Publishes the full tag (`0.24.0-alpine3.22.1-1`), a bare terraform-docs
+   - Publishes the full tag (`0.24.0-alpine3.24.1-1`), a bare terraform-docs
      version tag (`0.24.0`) and `latest`
 
 2. **Creates a GitHub Release** (`create-release` job in `.github/workflows/docker_release.yml`)
@@ -98,7 +98,7 @@ Before creating a release:
 
 ### Release didn't trigger
 
-- Ensure the tag starts with `v` and follows the format (e.g. `v0.24.0-alpine3.22.1-1`)
+- Ensure the tag starts with `v` and follows the format (e.g. `v0.24.0-alpine3.24.1-1`)
 - Check the GitHub Actions tab for workflow runs
 - Verify you have push permissions
 
@@ -132,10 +132,10 @@ If automation fails, create a release manually:
 
 1. Go to the repository's "Releases" page
 2. Click "Create a new release"
-3. Choose your tag (must follow the format: `v0.24.0-alpine3.22.1-1`)
+3. Choose your tag (must follow the format: `v0.24.0-alpine3.24.1-1`)
 4. Add release notes
 5. Include Docker pull commands:
    ```
-   docker pull ghcr.io/ragedunicorn/docker-terraform-docs:0.24.0-alpine3.22.1-1
-   docker pull ragedunicorn/terraform-docs:0.24.0-alpine3.22.1-1
+   docker pull ghcr.io/ragedunicorn/docker-terraform-docs:0.24.0-alpine3.24.1-1
+   docker pull ragedunicorn/terraform-docs:0.24.0-alpine3.24.1-1
    ```

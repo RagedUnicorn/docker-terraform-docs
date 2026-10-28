@@ -14,7 +14,7 @@ with `terraform-docs` as its entrypoint.
 docker pull ragedunicorn/terraform-docs:latest
 
 # Or pull a specific version
-docker pull ragedunicorn/terraform-docs:0.24.0-alpine3.22.1-1
+docker pull ragedunicorn/terraform-docs:0.24.0-alpine3.24.1-1
 
 # Show the version
 docker run --rm ragedunicorn/terraform-docs:latest --version
@@ -80,10 +80,10 @@ This image uses versioning that includes all component versions:
 
 ### Version Examples
 
-- `0.24.0-alpine3.22.1-1` - Initial release with terraform-docs 0.24.0 and Alpine 3.22.1
-- `0.24.0-alpine3.22.1-2` - Rebuild of the same versions (base CVE patch, fixes)
-- `0.24.0-alpine3.22.2-1` - Alpine Linux patch update
-- `0.25.0-alpine3.22.1-1` - terraform-docs version update (build resets to 1)
+- `0.24.0-alpine3.24.1-1` - terraform-docs 0.24.0 on Alpine 3.24.1, build 1
+- `0.24.0-alpine3.24.1-2` - Rebuild of the same versions (base CVE patch, fixes)
+- `0.24.0-alpine3.24.2-1` - Alpine Linux patch update
+- `0.25.0-alpine3.24.1-1` - terraform-docs version update (build resets to 1)
 
 ## License
 

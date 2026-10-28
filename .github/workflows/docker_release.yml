@@ -68,7 +68,7 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
             ${{ secrets.DOCKERHUB_USERNAME }}/terraform-docs
           tags: |
-            # Full version tag with the 'v' prefix stripped (e.g. 0.24.0-alpine3.22.1-1)
+            # Full version tag with the 'v' prefix stripped (e.g. 0.24.0-alpine3.24.1-1)
             type=semver,pattern={{version}}
             # Also create terraform-docs version tag (e.g. 0.24.0)
             type=match,pattern=v(\d+\.\d+\.\d+)-alpine.*,group=1,enable=${{ !contains(github.ref, '-rc') && !contains(github.ref, '-beta') && !contains(github.ref, '-alpha') }}
