@@ -80,7 +80,7 @@ $env:TERRAFORM_DOCS_TEST_VERSION="test"; docker compose -f docker-compose.test.y
 **Windows (Command Prompt):**
 
 ```cmd
-set TERRAFORM_DOCS_TEST_VERSION=test && docker compose -f docker-compose.test.yml run test-all
+set "TERRAFORM_DOCS_TEST_VERSION=test" && docker compose -f docker-compose.test.yml run test-all
 ```
 
 **Why local testing is important:**
