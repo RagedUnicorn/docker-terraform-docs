@@ -10,12 +10,12 @@ Container Structure Tests.
 docker build -t ragedunicorn/terraform-docs:test .
 
 # Run all tests
-TERRAFORM_DOCS_VERSION=test docker compose -f docker-compose.test.yml run test-all
+TERRAFORM_DOCS_TEST_VERSION=test docker compose -f docker-compose.test.yml run test-all
 
 # Run individual test suites
-TERRAFORM_DOCS_VERSION=test docker compose -f docker-compose.test.yml up container-test          # File structure
-TERRAFORM_DOCS_VERSION=test docker compose -f docker-compose.test.yml up container-test-command  # Command execution
-TERRAFORM_DOCS_VERSION=test docker compose -f docker-compose.test.yml up container-test-metadata # Metadata
+TERRAFORM_DOCS_TEST_VERSION=test docker compose -f docker-compose.test.yml up container-test          # File structure
+TERRAFORM_DOCS_TEST_VERSION=test docker compose -f docker-compose.test.yml up container-test-command  # Command execution
+TERRAFORM_DOCS_TEST_VERSION=test docker compose -f docker-compose.test.yml up container-test-metadata # Metadata
 ```
 
 ## Test Structure
@@ -68,19 +68,19 @@ docker build -t ragedunicorn/terraform-docs:test .
 **Linux/macOS:**
 
 ```bash
-TERRAFORM_DOCS_VERSION=test docker compose -f docker-compose.test.yml run test-all
+TERRAFORM_DOCS_TEST_VERSION=test docker compose -f docker-compose.test.yml run test-all
 ```
 
 **Windows (PowerShell):**
 
 ```powershell
-$env:TERRAFORM_DOCS_VERSION="test"; docker compose -f docker-compose.test.yml run test-all
+$env:TERRAFORM_DOCS_TEST_VERSION="test"; docker compose -f docker-compose.test.yml run test-all
 ```
 
 **Windows (Command Prompt):**
 
 ```cmd
-set TERRAFORM_DOCS_VERSION=test && docker compose -f docker-compose.test.yml run test-all
+set TERRAFORM_DOCS_TEST_VERSION=test && docker compose -f docker-compose.test.yml run test-all
 ```
 
 **Why local testing is important:**
@@ -96,21 +96,21 @@ set TERRAFORM_DOCS_VERSION=test && docker compose -f docker-compose.test.yml run
 
 ```bash
 # File structure tests
-TERRAFORM_DOCS_VERSION=test docker compose -f docker-compose.test.yml up container-test
+TERRAFORM_DOCS_TEST_VERSION=test docker compose -f docker-compose.test.yml up container-test
 
 # Command execution tests
-TERRAFORM_DOCS_VERSION=test docker compose -f docker-compose.test.yml up container-test-command
+TERRAFORM_DOCS_TEST_VERSION=test docker compose -f docker-compose.test.yml up container-test-command
 
 # Metadata tests
-TERRAFORM_DOCS_VERSION=test docker compose -f docker-compose.test.yml up container-test-metadata
+TERRAFORM_DOCS_TEST_VERSION=test docker compose -f docker-compose.test.yml up container-test-metadata
 ```
 
 **Windows (PowerShell):**
 
 ```powershell
-$env:TERRAFORM_DOCS_VERSION="test"; docker compose -f docker-compose.test.yml up container-test
-$env:TERRAFORM_DOCS_VERSION="test"; docker compose -f docker-compose.test.yml up container-test-command
-$env:TERRAFORM_DOCS_VERSION="test"; docker compose -f docker-compose.test.yml up container-test-metadata
+$env:TERRAFORM_DOCS_TEST_VERSION="test"; docker compose -f docker-compose.test.yml up container-test
+$env:TERRAFORM_DOCS_TEST_VERSION="test"; docker compose -f docker-compose.test.yml up container-test-command
+$env:TERRAFORM_DOCS_TEST_VERSION="test"; docker compose -f docker-compose.test.yml up container-test-metadata
 ```
 
 ## Troubleshooting Test Failures

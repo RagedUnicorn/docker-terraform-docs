@@ -90,7 +90,7 @@ Use conventional commit format for better changelogs:
 Before creating a release:
 
 1. Build the image locally with your version changes
-2. Run the full test suite (`TERRAFORM_DOCS_VERSION=test docker compose -f docker-compose.test.yml run test-all`)
+2. Run the full test suite (`TERRAFORM_DOCS_TEST_VERSION=test docker compose -f docker-compose.test.yml run test-all`)
 3. Verify `terraform-docs` generates docs for a sample module
 4. Check that multi-platform builds work (especially arm64)
 

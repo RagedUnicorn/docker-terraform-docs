@@ -115,19 +115,19 @@ docker build -t ragedunicorn/terraform-docs:test .
 **Linux/macOS:**
 
 ```bash
-TERRAFORM_DOCS_VERSION=test docker compose -f docker-compose.test.yml run test-all
+TERRAFORM_DOCS_TEST_VERSION=test docker compose -f docker-compose.test.yml run test-all
 ```
 
 **Windows (PowerShell):**
 
 ```powershell
-$env:TERRAFORM_DOCS_VERSION="test"; docker compose -f docker-compose.test.yml run test-all
+$env:TERRAFORM_DOCS_TEST_VERSION="test"; docker compose -f docker-compose.test.yml run test-all
 ```
 
 **Windows (Command Prompt):**
 
 ```cmd
-set TERRAFORM_DOCS_VERSION=test && docker compose -f docker-compose.test.yml run test-all
+set TERRAFORM_DOCS_TEST_VERSION=test && docker compose -f docker-compose.test.yml run test-all
 ```
 
 **Important:** Never test against remote images - they may have different labels
