@@ -190,6 +190,21 @@ incremented only for rebuilds that leave the terraform-docs version unchanged (a
 Alpine patch or base CVE fix). For the detailed release process, see
 [RELEASE.md](RELEASE.md).
 
+## Image Verification
+
+Released images are signed with [cosign](https://docs.sigstore.dev/) keyless signing and carry SBOM and provenance attestations.
+
+```bash
+# Verify the signature (works for both ghcr.io/ragedunicorn/docker-terraform-docs and ragedunicorn/terraform-docs)
+cosign verify ragedunicorn/terraform-docs:latest \
+  --certificate-identity-regexp '^https://github.com/RagedUnicorn/docker-terraform-docs/\.github/workflows/docker_release\.yml@refs/tags/v' \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com
+
+# Inspect the SBOM and provenance attestations
+docker buildx imagetools inspect ragedunicorn/terraform-docs:latest --format '{{ json .SBOM }}'
+docker buildx imagetools inspect ragedunicorn/terraform-docs:latest --format '{{ json .Provenance }}'
+```
+
 ## Automated Dependency Updates
 
 This project uses [Renovate](https://docs.renovatebot.com/) to automatically
