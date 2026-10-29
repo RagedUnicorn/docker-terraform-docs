@@ -45,6 +45,18 @@ docker run --rm ragedunicorn/terraform-docs:latest --version
 docker run --rm -v "$(pwd)":/workspace ragedunicorn/terraform-docs:latest markdown .
 ```
 
+On Windows, use the PowerShell form:
+
+```powershell
+# Generate markdown docs for the module in the current directory
+docker run --rm -v "${PWD}:/workspace" ragedunicorn/terraform-docs:latest markdown .
+```
+
+Write `${PWD}` **with braces** and keep the colon inside the quotes - without
+braces PowerShell parses `$PWD:` as a scope-qualified variable (as in
+`$env:PATH`) and rejects the argument. See the
+[Windows (PowerShell) notes](#windows-powershell-notes) for details.
+
 For development and building from source, see [DEVELOPMENT.md](DEVELOPMENT.md).
 
 ## Usage
@@ -65,6 +77,19 @@ docker run --rm -v "$(pwd)":/workspace ragedunicorn/terraform-docs:0.24.0 [terra
 docker run --rm -v "$(pwd)":/workspace ragedunicorn/terraform-docs:0.24.0-alpine3.24.1-1 [terraform-docs-args]
 ```
 
+PowerShell:
+
+```powershell
+# Using latest version
+docker run --rm -v "${PWD}:/workspace" ragedunicorn/terraform-docs:latest [terraform-docs-args]
+
+# Using a specific terraform-docs version
+docker run --rm -v "${PWD}:/workspace" ragedunicorn/terraform-docs:0.24.0 [terraform-docs-args]
+
+# Using an exact version combination
+docker run --rm -v "${PWD}:/workspace" ragedunicorn/terraform-docs:0.24.0-alpine3.24.1-1 [terraform-docs-args]
+```
+
 ### Examples
 
 ```bash
@@ -79,6 +104,19 @@ docker run --rm -v "$(pwd)":/workspace ragedunicorn/terraform-docs:latest json .
 
 # Recurse into submodules
 docker run --rm -v "$(pwd)":/workspace ragedunicorn/terraform-docs:latest markdown --recursive .
+```
+
+PowerShell:
+
+```powershell
+# Generate a markdown table for the module in the working directory
+docker run --rm -v "${PWD}:/workspace" ragedunicorn/terraform-docs:latest markdown table .
+
+# Emit the documentation as JSON
+docker run --rm -v "${PWD}:/workspace" ragedunicorn/terraform-docs:latest json .
+
+# Recurse into submodules
+docker run --rm -v "${PWD}:/workspace" ragedunicorn/terraform-docs:latest markdown --recursive .
 ```
 
 ## Runtime Notes
@@ -97,6 +135,13 @@ docker run --rm -v "$(pwd)":/workspace \
   ragedunicorn/terraform-docs:latest markdown table --output-file README.md .
 ```
 
+PowerShell:
+
+```powershell
+docker run --rm -v "${PWD}:/workspace" `
+  ragedunicorn/terraform-docs:latest markdown table --output-file README.md .
+```
+
 terraform-docs replaces the content between `<!-- BEGIN_TF_DOCS -->` and
 `<!-- END_TF_DOCS -->` marker comments in the target file.
 
@@ -110,6 +155,10 @@ stay owned by you:
 docker run --rm --user "$(id -u):$(id -g)" \
   -v "$(pwd)":/workspace ragedunicorn/terraform-docs:latest markdown table --output-file README.md .
 ```
+
+**Windows hosts:** skip this section. Docker Desktop bind mounts do not carry
+Unix file ownership, so `--user` matching has no effect there (and `id` does
+not exist in PowerShell). Ownership matching applies to Linux and macOS hosts.
 
 In Docker Compose, match the host UID/GID:
 
@@ -126,6 +175,48 @@ automatically:
 ```bash
 docker run --rm -v "$(pwd)":/workspace ragedunicorn/terraform-docs:latest .
 ```
+
+PowerShell:
+
+```powershell
+docker run --rm -v "${PWD}:/workspace" ragedunicorn/terraform-docs:latest .
+```
+
+### Windows (PowerShell) notes
+
+The PowerShell variants above differ from the bash ones in two ways: the
+mount is written `-v "${PWD}:/workspace"` instead of `-v "$(pwd)":/workspace`,
+and the backtick replaces `\` as the line-continuation character.
+
+The mount spelling matters:
+
+- Pasting the bash form into PowerShell breaks: the argument ends at the
+  closing quote, so `"$(pwd)":/workspace` reaches Docker as two arguments
+  (`C:\path` and `:/workspace`).
+- `"$PWD:/workspace"` without braces is a parse error: PowerShell reads a
+  colon after a variable as a scope qualifier (as in `$env:PATH`), and `/` is
+  not a valid variable-name character.
+- `"${PWD}:/workspace"` works: the braces end the variable name at `PWD`, the
+  colon stays literal, and Docker splits the resulting `C:\path:/workspace`
+  on the second colon because it recognises the `C:` drive prefix.
+
+To check what the container actually sees under `/workspace`, run a
+look-inside command:
+
+```powershell
+docker run --rm -v "${PWD}:/workspace" --entrypoint sh ragedunicorn/terraform-docs:latest -c 'pwd; ls -la /workspace'
+```
+
+The single quotes keep `pwd; ls -la /workspace` as one literal argument to
+the container's `sh`, so the `;` runs inside the container - unquoted,
+PowerShell would treat `;` as its own statement separator and run
+`ls -la /workspace` on the host.
+
+For more complex invocations where PowerShell keeps mangling arguments, the
+[stop-parsing token `--%`](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_parsing#the-stop-parsing-token)
+is an escape hatch: PowerShell passes everything after it verbatim. Nothing
+after `--%` is expanded - including `${PWD}` - so it cannot be combined with
+the mount examples above; none of the examples in this README need it.
 
 ## Docker Compose Usage
 
@@ -145,6 +236,9 @@ available to compose (bash defines `UID` but not `GID`, so derive both from `id`
 export UID="$(id -u)" GID="$(id -g)"
 docker compose run --rm terraform-docs markdown .
 ```
+
+On Windows hosts this step is unnecessary (see
+[Match the host user](#match-the-host-user-for-bind-mount-ownership)).
 
 ### Example Configuration
 

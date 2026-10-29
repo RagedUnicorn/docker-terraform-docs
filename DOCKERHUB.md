@@ -23,6 +23,15 @@ docker run --rm ragedunicorn/terraform-docs:latest --version
 docker run --rm -v "$(pwd)":/workspace ragedunicorn/terraform-docs:latest markdown .
 ```
 
+On Windows, use the PowerShell form - `${PWD}` **with braces** and the colon
+inside the quotes (without braces PowerShell parses `$PWD:` as a
+scope-qualified variable, as in `$env:PATH`, and rejects the argument):
+
+```powershell
+# Generate markdown docs for the module in the current directory
+docker run --rm -v "${PWD}:/workspace" ragedunicorn/terraform-docs:latest markdown .
+```
+
 ## Features
 
 - 🪶 **Small footprint**: minimal Alpine-based runtime image
@@ -41,10 +50,23 @@ docker run --rm -v "$(pwd)":/workspace ragedunicorn/terraform-docs:latest markdo
 docker run --rm -v "$(pwd)":/workspace ragedunicorn/terraform-docs:latest markdown table .
 ```
 
+PowerShell:
+
+```powershell
+docker run --rm -v "${PWD}:/workspace" ragedunicorn/terraform-docs:latest markdown table .
+```
+
 ### Inject docs into a README (writable mount)
 
 ```bash
 docker run --rm -v "$(pwd)":/workspace \
+  ragedunicorn/terraform-docs:latest markdown table --output-file README.md .
+```
+
+PowerShell:
+
+```powershell
+docker run --rm -v "${PWD}:/workspace" `
   ragedunicorn/terraform-docs:latest markdown table --output-file README.md .
 ```
 
@@ -54,12 +76,22 @@ docker run --rm -v "$(pwd)":/workspace \
 docker run --rm -v "$(pwd)":/workspace ragedunicorn/terraform-docs:latest json .
 ```
 
+PowerShell:
+
+```powershell
+docker run --rm -v "${PWD}:/workspace" ragedunicorn/terraform-docs:latest json .
+```
+
 ### Match host user for bind-mount ownership
 
 ```bash
 docker run --rm --user "$(id -u):$(id -g)" \
   -v "$(pwd)":/workspace ragedunicorn/terraform-docs:latest markdown table --output-file README.md .
 ```
+
+On Windows hosts this is not needed: Docker Desktop bind mounts do not carry
+Unix file ownership, so `--user` matching has no effect (and `id` does not
+exist in PowerShell).
 
 ## Runtime Notes
 
