@@ -58,8 +58,8 @@ which lines up with terraform-docs' tarball arch naming (`amd64`, `arm64`).
 > download blindly.
 
 > **Note on asset naming.** terraform-docs release assets carry a `v` prefix and
-> a hyphen arch separator (`terraform-docs-v0.24.0-linux-amd64.tar.gz`), and one
-> combined `terraform-docs-v0.24.0.sha256sum` file covers every asset.
+> a hyphen arch separator (`terraform-docs-v<terraform-docs-version>-linux-amd64.tar.gz`), and one
+> combined `terraform-docs-v<terraform-docs-version>.sha256sum` file covers every asset.
 
 ## Development Workflow
 
@@ -86,21 +86,28 @@ terraform-docs markdown .
 # Basic build (BuildKit supplies TARGETARCH automatically)
 docker build -t ragedunicorn/terraform-docs:dev .
 
-# Build with version metadata
+# Build with version metadata (terraform-docs and Alpine come from the Dockerfile)
 docker build \
-  --build-arg TERRAFORM_DOCS_VERSION=0.24.0 \
   --build-arg BUILD_DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
-  --build-arg VERSION=0.24.0-alpine3.24.3-1 \
-  -t ragedunicorn/terraform-docs:0.24.0-alpine3.24.3-1 .
+  --build-arg VERSION=dev \
+  -t ragedunicorn/terraform-docs:dev .
+
+# Build a different terraform-docs version than the Dockerfile default
+docker build \
+  --build-arg TERRAFORM_DOCS_VERSION=<terraform-docs-version> \
+  -t ragedunicorn/terraform-docs:dev .
 
 # Multi-platform build (requires buildx). Do NOT set TARGETARCH by hand.
 docker buildx build \
   --platform linux/amd64,linux/arm64 \
-  --build-arg TERRAFORM_DOCS_VERSION=0.24.0 \
-  --build-arg VERSION=0.24.0-alpine3.24.3-1 \
+  --build-arg VERSION=dev \
   --build-arg BUILD_DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
-  -t ragedunicorn/terraform-docs:0.24.0-alpine3.24.3-1 .
+  -t ragedunicorn/terraform-docs:dev .
 ```
+
+The terraform-docs version is the `TERRAFORM_DOCS_VERSION` default in the
+`Dockerfile` and the Alpine version is its `FROM` line. Renovate keeps both
+current, so the docs do not repeat them.
 
 ### 3. Testing Your Changes
 

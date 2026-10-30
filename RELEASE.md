@@ -7,8 +7,10 @@ project.
 
 ```bash
 # Tag format: v{terraform_docs_version}-alpine{alpine_version}-{build_number}
-git tag -a v0.24.0-alpine3.24.3-1 -m "v0.24.0-alpine3.24.3-1"
-git push origin v0.24.0-alpine3.24.3-1
+# Take the versions from the Dockerfile (TERRAFORM_DOCS_VERSION and the FROM line)
+TAG=v<terraform-docs-version>-alpine<alpine-version>-<build>
+git tag -a "$TAG" -m "$TAG"
+git push origin "$TAG"
 ```
 
 This automatically triggers the release process via GitHub Actions.
@@ -19,11 +21,11 @@ See [README.md](README.md#versioning) for the complete versioning documentation.
 
 **Format:** `v{terraform_docs_version}-alpine{alpine_version}-{build_number}`
 
-Examples:
-- `v0.24.0-alpine3.24.1-1` - terraform-docs 0.24.0 on Alpine 3.24.1, build 1
-- `v0.24.0-alpine3.24.1-2` - Rebuild with the same versions
-- `v0.24.0-alpine3.24.2-1` - Alpine patch update (build resets to 1)
-- `v0.25.0-alpine3.24.1-1` - terraform-docs update (build resets to 1)
+Examples (`X.Y.Z` is the terraform-docs version, `A.B.C` the Alpine version):
+- `vX.Y.Z-alpineA.B.C-1` - terraform-docs X.Y.Z on Alpine A.B.C, build 1
+- `vX.Y.Z-alpineA.B.C-2` - Rebuild with the same versions
+- `vX.Y.Z-alpineA.B.D-1` - Alpine patch update (build resets to 1)
+- `vX.Y+1.0-alpineA.B.C-1` - terraform-docs update (build resets to 1)
 
 ## Release Workflow
 
@@ -35,8 +37,8 @@ When you push a tag, GitHub Actions automatically:
    - Pushes to both GitHub Container Registry and Docker Hub
    - Attaches SBOM and provenance (`mode=max`) attestations
    - Signs the pushed digest in both registries with cosign keyless signing (GitHub OIDC)
-   - Publishes the full tag (`0.24.0-alpine3.24.1-1`), a bare terraform-docs
-     version tag (`0.24.0`) and `latest`
+   - Publishes the full tag (`X.Y.Z-alpineA.B.C-N`), a bare terraform-docs
+     version tag (`X.Y.Z`) and `latest`
 
 2. **Creates a GitHub Release** (`create-release` job in `.github/workflows/docker_release.yml`)
    - Runs only after the images were tested and pushed successfully
@@ -62,16 +64,19 @@ Create a new release when:
 
 ### Update Docker Hub Documentation
 
-After creating a release, update the Docker Hub repository description:
+`DOCKERHUB.md` is the source of truth for the Docker Hub repository
+description. It deliberately contains no concrete versions (readers find those
+in the Tags tab), so a release alone does not require a description update.
+Only when `DOCKERHUB.md` changed since the last sync:
 
 1. Go to [Docker Hub](https://hub.docker.com/r/ragedunicorn/terraform-docs)
 2. Click "Manage Repository" → "Description"
 3. Copy the contents of `DOCKERHUB.md`
-4. Update any version numbers in the examples to match the latest release
-5. Save the changes
+4. Save the changes
 
-**Note**: `DOCKERHUB.md` is maintained in the repository as the source of truth
-for the Docker Hub description.
+**Note**: the sync stays manual on purpose. Docker Hub only offers an
+undocumented endpoint for description updates, and it needs a separate
+Read/Write/Delete access token.
 
 ## Best Practices
 
@@ -100,7 +105,7 @@ Before creating a release:
 
 ### Release didn't trigger
 
-- Ensure the tag starts with `v` and follows the format (e.g. `v0.24.0-alpine3.24.1-1`)
+- Ensure the tag starts with `v` and follows the format (e.g. `vX.Y.Z-alpineA.B.C-N`)
 - Check the GitHub Actions tab for workflow runs
 - Verify you have push permissions
 
@@ -134,10 +139,10 @@ If automation fails, create a release manually:
 
 1. Go to the repository's "Releases" page
 2. Click "Create a new release"
-3. Choose your tag (must follow the format: `v0.24.0-alpine3.24.1-1`)
+3. Choose your tag (must follow the format: `vX.Y.Z-alpineA.B.C-N`)
 4. Add release notes
-5. Include Docker pull commands:
+5. Include Docker pull commands (the tag without the leading `v`):
    ```
-   docker pull ghcr.io/ragedunicorn/docker-terraform-docs:0.24.0-alpine3.24.1-1
-   docker pull ragedunicorn/terraform-docs:0.24.0-alpine3.24.1-1
+   docker pull ghcr.io/ragedunicorn/docker-terraform-docs:<tag>
+   docker pull ragedunicorn/terraform-docs:<tag>
    ```

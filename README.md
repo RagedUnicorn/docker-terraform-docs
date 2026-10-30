@@ -71,10 +71,10 @@ subcommand and flags can be passed directly to the `docker run` command.
 docker run --rm -v "$(pwd)":/workspace ragedunicorn/terraform-docs:latest [terraform-docs-args]
 
 # Using a specific terraform-docs version
-docker run --rm -v "$(pwd)":/workspace ragedunicorn/terraform-docs:0.24.0 [terraform-docs-args]
+docker run --rm -v "$(pwd)":/workspace ragedunicorn/terraform-docs:<terraform-docs-version> [terraform-docs-args]
 
 # Using an exact version combination
-docker run --rm -v "$(pwd)":/workspace ragedunicorn/terraform-docs:0.24.0-alpine3.24.1-1 [terraform-docs-args]
+docker run --rm -v "$(pwd)":/workspace ragedunicorn/terraform-docs:<terraform-docs-version>-alpine<alpine-version>-<build> [terraform-docs-args]
 ```
 
 PowerShell:
@@ -84,11 +84,14 @@ PowerShell:
 docker run --rm -v "${PWD}:/workspace" ragedunicorn/terraform-docs:latest [terraform-docs-args]
 
 # Using a specific terraform-docs version
-docker run --rm -v "${PWD}:/workspace" ragedunicorn/terraform-docs:0.24.0 [terraform-docs-args]
+docker run --rm -v "${PWD}:/workspace" ragedunicorn/terraform-docs:<terraform-docs-version> [terraform-docs-args]
 
 # Using an exact version combination
-docker run --rm -v "${PWD}:/workspace" ragedunicorn/terraform-docs:0.24.0-alpine3.24.1-1 [terraform-docs-args]
+docker run --rm -v "${PWD}:/workspace" ragedunicorn/terraform-docs:<terraform-docs-version>-alpine<alpine-version>-<build> [terraform-docs-args]
 ```
+
+Available tags are listed on [Docker Hub](https://hub.docker.com/r/ragedunicorn/terraform-docs/tags) and in the
+[GitHub releases](https://github.com/RagedUnicorn/docker-terraform-docs/releases).
 
 ### Examples
 
@@ -275,9 +278,12 @@ This project uses versioning that matches the Docker image contents:
 
 **Format:** `{terraform_docs_version}-alpine{alpine_version}-{build_number}`
 
-Examples:
-- `0.24.0-alpine3.24.1-1` - terraform-docs 0.24.0 on Alpine 3.24.1, build 1
+Examples (`X.Y.Z` is the terraform-docs version, `A.B.C` the Alpine version):
+- `X.Y.Z-alpineA.B.C-1` - terraform-docs X.Y.Z on Alpine A.B.C, build 1
+- `X.Y.Z` - Most recent build of terraform-docs X.Y.Z
 - `latest` - Most recent stable release
+
+The current tags are listed on [Docker Hub](https://hub.docker.com/r/ragedunicorn/terraform-docs/tags).
 
 The build number resets to `1` whenever terraform-docs is bumped, and is
 incremented only for rebuilds that leave the terraform-docs version unchanged (an
