@@ -112,6 +112,9 @@ jobs:
             echo ""
             echo "Testing that terraform-docs generates docs for a sample module..."
             tmp=$(mktemp -d)
+            # mktemp -d is 0700 and owned by the runner; the image runs as an
+            # unprivileged user that must be able to read the mounted module
+            chmod 755 "$tmp"
             printf 'variable "name" {\n  description = "Name to greet"\n  type        = string\n  default     = "world"\n}\n\noutput "greeting" {\n  description = "A friendly greeting"\n  value       = "Hello"\n}\n' > "$tmp/main.tf"
             out=$(docker run --rm -v "$tmp":/workspace ragedunicorn/terraform-docs:test markdown .)
             echo "$out"
