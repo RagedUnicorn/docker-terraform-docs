@@ -4,7 +4,7 @@
 FROM alpine:3.24.3 AS build
 
 # renovate: datasource=github-releases depName=terraform-docs/terraform-docs
-ARG TERRAFORM_DOCS_VERSION=0.24.0
+ARG TERRAFORM_DOCS_VERSION=0.25.1
 # Provided automatically by buildx (linux/amd64 -> amd64, linux/arm64 -> arm64)
 ARG TARGETARCH
 
